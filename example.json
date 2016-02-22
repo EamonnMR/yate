@@ -1,0 +1,18 @@
+{
+  "title": "People: a list",
+  "description": "This is a list of people.",
+  "people": [
+    {
+      "name": "Lorem Ipsum",
+      "address": "33 Dolor st, Amet"
+    },
+    {
+      "name": "Consectetur Adipiscing",
+      "address": "15 Elit, Sed Do"
+    }
+  ],
+  "footer": {
+    "info": "If you can see this, yate works somewhat correctly",
+    "copyright": "Copyright Euismod Tempor"
+  }
+}
