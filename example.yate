@@ -1,0 +1,20 @@
+<head>
+  <title><* title *></title>
+</head>
+<body>
+  <h1><* title *></h1>
+  <p><* description *></p>
+  <div>
+    <* EACH people person *>
+      <div>
+        <h2><* name *></h2>
+        <div><* address *></div>
+      </div>
+    <* ENDEACH *>
+  </div>
+  <div>
+    <* footer.info *>
+    <* footer.copyright *>
+  </div>
+</body>
+
