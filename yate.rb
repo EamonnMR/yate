@@ -3,22 +3,36 @@ require 'json'
 # Yet another template engine
 # To run: $ ruby yate.rb template.yate data.json out.html
 
-template = File.new(ARGV[0])
+template = File.read(ARGV[0]).split("")
 data = JSON.parse(File.read(ARGV[1]))
 out_file = File.open(ARGV[2], 'w')
 
 # Read in a .yate file into an array of nodes
 # Expects 'data' to support each_char
-def parse(data)
+def parse(data, end_tag)
   state = :outside
   # Possible states: :outside, :in_tag, :in_open, :in_close
   
   node_list = []
   current_node = {text: '', type: :normal}
+  # I'm not 100% sure what the smartest way to do this is.
+  # There are a few possibilities I looked at:
+  # * Mutating the string on each iteration, removing the first
+  # char (less readable syntax, seems wasteful to create so many
+  # strings)
+  # * Keeping a counter going (and passing the counter back and
+  # fourth through recursive calls)
+  #
+  # I settled for the most readable answer I could come up with,
+  # which is just splitting it and mutitating an array (it should
+  # be more obvious what's going on in that case, and we use the
+  # array to maintain the state of where we are in the string.
 
-  data.each_char do | next_char |
-    # puts next_char
-    # puts state
+  # It would probably be wise to profile all three options later,
+  # and pick the fastest (I suspect it's the 'counter' method)
+  loop do
+    next_char = data.shift
+    break if next_char == nil
     if state == :in_open
       if next_char == '*'
         node_list.push(current_node)
@@ -31,9 +45,17 @@ def parse(data)
     elsif state == :in_close
       if next_char == '>'
         current_node[:args] = current_node[:text].split(' ')
-        node_list.push(current_node)
-        current_node = {text: '', type: :normal}
+
         state = :outside
+        if current_node[:args][0] == end_tag
+          break
+        end
+
+        node_list.push(current_node)
+        if current_node[:args][0] == "EACH"
+          current_node[:children] = parse(data, "ENDEACH")
+        end
+        current_node = {text: '', type: :normal}
       else
         current_node[:text] += '*' + next_char
         state = :in_tag
@@ -113,8 +135,16 @@ def apply(template, scope_chain)
     if node[:type] == :normal
       processed += node[:text]
     elsif node[:type] == :tag
-      # FIXME: Hack to exclude tags we can't process yet
-      if node[:args].length == 1
+      if node[:args][0] == 'EACH'
+        array = get_data(node[:args][1], scope_chain)
+        array.each do | iterator |
+          new_scope_frame = {}
+          new_scope_frame[node[:args][2]] = iterator
+          scope_chain.push new_scope_frame
+          processed += apply(node[:children], scope_chain)
+          scope_chain.pop
+        end
+      elsif node[:args].length == 1
         value = get_data(node[:args][0], scope_chain)
         if value != nil
           processed += value
@@ -127,5 +157,5 @@ def apply(template, scope_chain)
   return processed
 end
 
-out_file << apply(parse(template), [data])
+out_file << apply(parse(template, nil), [data])
 
