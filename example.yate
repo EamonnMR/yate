@@ -7,8 +7,8 @@
   <div>
     <* EACH people person *>
       <div>
-        <h2><* name *></h2>
-        <div><* address *></div>
+        <h2><* person.name *></h2>
+        <div><* person.address *></div>
       </div>
     <* ENDEACH *>
   </div>
