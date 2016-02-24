@@ -54,6 +54,12 @@ def parse(data)
       puts state
     end
   end
+  
+  if state == :in_tag
+    raise "Error: Encounterer EOF inside tag"
+  else
+    node_list.push(current_node)
+  end
 
   return node_list
 end
@@ -63,7 +69,6 @@ def apply(template, scope_chain)
   processed = ""
   loop do # Would a while true be more idiomatic?
     node = template.shift
-    puts node[:text]
     break if node == nil
     
     if node[:type] == :normal
