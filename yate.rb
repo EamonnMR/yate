@@ -1,6 +1,6 @@
 require 'json'
 
-# Yet another template language
+# Yet another template engine
 # To run: $ ruby yate.rb template.yate data.json out.html
 
 template = File.new(ARGV[0])
