@@ -30,6 +30,7 @@ def parse(data)
       end
     elsif state == :in_close
       if next_char == '>'
+        current_node[:args] = current_node[:text].split(' ')
         node_list.push(current_node)
         current_node = {text: '', type: :normal}
         state = :outside
