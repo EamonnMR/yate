@@ -64,10 +64,34 @@ def parse(data)
   return node_list
 end
 
+# Get a piece of data by key from the scope chain.
+
+# We're doing enough with the scope chain that it almost
+# makes sense to use a class.
+# almost.
+def get_data(key, scope_chain)
+  value = nil
+  scope_chain.each do | scope |
+    if scope.has_key?(key)
+      value = scope[key]
+      break
+    end
+  end
+  if value == nil
+    puts "Could not find value #{value} in any scope"
+    # Should this crash the script?
+  end
+  return value
+end
+
+# Bind data from the scope chain to a template.
+#
+# Expects the template in a list of nodes, 
+# expects the scope chain as a list of hashes.
 def apply(template, scope_chain)
   template.each do |i| puts i end
   processed = ""
-  loop do # Would a while true be more idiomatic?
+  loop do # Would a `while true` be more idiomatic?
     node = template.shift
     break if node == nil
     
