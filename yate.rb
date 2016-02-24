@@ -70,16 +70,30 @@ end
 # We're doing enough with the scope chain that it almost
 # makes sense to use a class.
 # almost.
-def get_data(key, scope_chain)
+def get_data(dot_seperated_keys, scope_chain)
+  keys = dot_seperated_keys.split(".")
+
   value = nil
   scope_chain.each do | scope |
-    if scope.has_key?(key)
-      value = scope[key]
+    if scope.has_key?(keys[0])
+      value = scope[keys[0]]
+      keys.shift
+      # we handle the first key differently
+      # because we need to get the value from the
+      # scope before we can work on it.
+      keys.each do | key |
+        if value.has_key?(key)
+          value = value[key]
+        else
+          value = nil
+          break
+        end
+      end
       break
     end
   end
   if value == nil
-    puts "Could not find key #{key} in any scope"
+    puts "Could not find key #{dot_seperated_keys} in any scope"
     # Should this crash the script?
   end
   return value
