@@ -115,7 +115,7 @@ def get_data(dot_seperated_keys, scope_chain)
     end
   end
   if value == nil
-    puts "Could not find key #{dot_seperated_keys} in any scope"
+    # puts "Could not find key #{dot_seperated_keys} in any scope"
     # Should this crash the script?
   end
   return value
@@ -126,17 +126,15 @@ end
 # Expects the template in a list of nodes, 
 # expects the scope chain as a list of hashes.
 def apply(template, scope_chain)
-  template.each do |i| puts i end
   processed = ""
-  loop do # Would a `while true` be more idiomatic?
-    node = template.shift
-    break if node == nil
-    
+  template.each do | node|
     if node[:type] == :normal
       processed += node[:text]
     elsif node[:type] == :tag
       if node[:args][0] == 'EACH'
         array = get_data(node[:args][1], scope_chain)
+        puts array
+        puts node[:children]
         array.each do | iterator |
           new_scope_frame = {}
           new_scope_frame[node[:args][2]] = iterator
@@ -157,5 +155,9 @@ def apply(template, scope_chain)
   return processed
 end
 
-out_file << apply(parse(template, nil), [data])
+def process_template(template, data)
+  return apply(parse(template, nil), [data])
+end
+
+out_file << process_template(template, data)
 
