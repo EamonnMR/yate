@@ -132,10 +132,7 @@ def apply(template, scope_chain)
       processed += node[:text]
     elsif node[:type] == :tag
       if node[:args][0] == 'EACH'
-        array = get_data(node[:args][1], scope_chain)
-        puts array
-        puts node[:children]
-        array.each do | iterator |
+        get_data(node[:args][1], scope_chain).each do | iterator |
           new_scope_frame = {}
           new_scope_frame[node[:args][2]] = iterator
           scope_chain.push new_scope_frame
