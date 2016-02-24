@@ -79,7 +79,7 @@ def get_data(key, scope_chain)
     end
   end
   if value == nil
-    puts "Could not find value #{value} in any scope"
+    puts "Could not find key #{key} in any scope"
     # Should this crash the script?
   end
   return value
@@ -99,7 +99,13 @@ def apply(template, scope_chain)
     if node[:type] == :normal
       processed += node[:text]
     elsif node[:type] == :tag
-      # TODO: Process tags here
+      # FIXME: Hack to exclude tags we can't process yet
+      if node[:args].length == 1
+        value = get_data(node[:args][0], scope_chain)
+        if value != nil
+          processed += value
+        end
+      end
     end
     
   end
