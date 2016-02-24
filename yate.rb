@@ -8,7 +8,7 @@ data = JSON.parse(File.read(ARGV[1]))
 out_file = File.open(ARGV[2], 'w')
 
 # Read in a .yate file into an array of nodes
-# Expects 'data' to support each_char
+# Expects an array of single char strings
 def parse(data, end_tag)
   state = :outside
   # Possible states: :outside, :in_tag, :in_open, :in_close
