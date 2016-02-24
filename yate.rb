@@ -10,7 +10,6 @@ out_file = File.open(ARGV[2], 'w')
 # Read in a .yate file into an array of nodes
 # Expects 'data' to support each_char
 def parse(data)
-  puts data
   state = :outside
   # Possible states: :outside, :in_tag, :in_open, :in_close
   
@@ -59,11 +58,24 @@ def parse(data)
   return node_list
 end
 
-def apply(template, data)
-  template.each do |node| puts node end
-  # puts data
-  template
+def apply(template, scope_chain)
+  template.each do |i| puts i end
+  processed = ""
+  loop do # Would a while true be more idiomatic?
+    node = template.shift
+    puts node[:text]
+    break if node == nil
+    
+    if node[:type] == :normal
+      processed += node[:text]
+    elsif node[:type] == :tag
+      # TODO: Process tags here
+    end
+    
+  end
+  
+  return processed
 end
 
-out_file << apply(parse(template), data)
+out_file << apply(parse(template), [data])
 
