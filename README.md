@@ -3,7 +3,7 @@ Yet Another Template Engine
 
 To run:
 
-ruby yate.rb <template.yate> <template.json> <output.html>
+ruby yate.rb \<template.yate\> \<template.json\> \<output.html\>
 
 Included: example.yate and example.json with some Lorem Ipsum to test with.
 
