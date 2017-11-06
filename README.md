@@ -1,5 +1,6 @@
 # yate
-Yet Another Template Engine
+Yet Another Template Engine.
+
 Did this for a job interview thing one time.
 
 To run:
