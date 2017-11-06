@@ -1,5 +1,6 @@
 # yate
 Yet Another Template Engine
+Did this for a job interview thing one time.
 
 To run:
 
@@ -14,5 +15,3 @@ Refactor ideas: turn the scope stack into a class, turn the parser into a class,
 Remaining bugs: It's still adding <* ENDEACH *> nodes to the parse tree. Though this does not impact functionality, it's sort of gross.
 
 Nice to haves: It would be cool if EACH/ENDEACH blocks left a comment block in place of an actual element to keep indentation nice.
-
-Final thoughts: if a ruby library exists, and it isn't on rubygems, does it really exist? Should probably put this on rubygems.
